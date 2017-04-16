@@ -1,0 +1,20 @@
+{
+  "name": "DIplomPHP",
+  "description": "",
+  "main": "",
+  "authors": [
+    "Evgeny <bboy.stenli@yandex.ru>"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "materialize": "^0.98.2"
+  }
+}
