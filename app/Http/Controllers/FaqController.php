@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\RubricController as Rubric;
+use App\Rubrics;
 use Illuminate\Http\Request;
 
 class FaqController extends Controller
@@ -10,11 +10,11 @@ class FaqController extends Controller
 
     function main()
     {
-        return view('main', ['rubrics' => Rubric->getRubric(), 'active' => '']);
+        return view('main', ['rubrics' => Rubrics::all(), 'main' => true]);
     }
 
     function rubric($rubric)
     {
-        return view('main', ['rubrics' => '', 'active' => $rubric]);
+        return view('faq', ['rubrics' => Rubrics::all(), 'active' => Rubrics::routeInRubrics($rubric)]);
     }
 }

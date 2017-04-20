@@ -1,48 +1,26 @@
-@extends('layout')
+@extends('layout', ['main' => $main])
 @section('title', 'Page Title')
 
 @section('sidebar')
-    @include("sidebar", ['rubrics' => $rubrics, 'active' => $active])
+    <img class="responsive-img" src="img/logo.jpg" alt="">
 @endsection
 @section('content')
-    <div class="card horizontal">
-        <div class="card-stacked">
-            <div class="card-content">
-                <p>I am a very simple card. I am good at containing small bits of information.</p>
+    <div class="row">
+
+        @foreach($rubrics as $rubric)
+            <div class="col l6">
+                <div class="card horizontal">
+                    <div class="card-stacked">
+                        <div class="card-content">
+                            <p>{{$rubric->name}}.</p>
+                        </div>
+                        <div class="card-action">
+                            <a href="{{$rubric->alias}}">Перейти</a>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="card-action">
-                <a href="#">This is a link</a>
-            </div>
-        </div>
+        @endforeach
     </div>
-    <div class="card horizontal">
-        <div class="card-stacked">
-            <div class="card-content">
-                <p>I am a very simple card. I am good at containing small bits of information.</p>
-            </div>
-            <div class="card-action">
-                <a href="#">This is a link</a>
-            </div>
-        </div>
-    </div>
-    <div class="card horizontal">
-        <div class="card-stacked">
-            <div class="card-content">
-                <p>I am a very simple card. I am good at containing small bits of information.</p>
-            </div>
-            <div class="card-action">
-                <a href="#">This is a link</a>
-            </div>
-        </div>
-    </div>
-    <div class="card horizontal">
-        <div class="card-stacked">
-            <div class="card-content">
-                <p>I am a very simple card. I am good at containing small bits of information.</p>
-            </div>
-            <div class="card-action">
-                <a href="#">This is a link</a>
-            </div>
-        </div>
-    </div>
+
 @endsection
