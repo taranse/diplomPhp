@@ -1,5 +1,5 @@
-@extends('layout', ['main' => $main])
-@section('title', 'Page Title')
+@extends('layouts.main', ['main' => $main])
+@section('title', 'Главная')
 
 @section('sidebar')
     <img class="responsive-img" src="img/logo.jpg" alt="">

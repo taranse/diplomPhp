@@ -11,5 +11,10 @@
 |
 */
 
+Route::get('/admin', 'AdminController@index');
+Route::get('/admin/moderators', 'AdminController@moderators');
+
 Route::get('/', 'FaqController@main');
 Route::get('/{rubric}', 'FaqController@rubric');
+Route::get('/{rubric}/{question}', 'FaqController@question');
+

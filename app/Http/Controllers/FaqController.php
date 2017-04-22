@@ -15,6 +15,14 @@ class FaqController extends Controller
 
     function rubric($rubric)
     {
-        return view('faq', ['rubrics' => Rubrics::all(), 'active' => Rubrics::routeInRubrics($rubric)]);
+        return view('faq', ['rubrics' => Rubrics::all(), 'activeRubric' => Rubrics::routeInRubrics($rubric)]);
+    }
+
+    function question($rubric, $question)
+    {
+        return view('faq', [
+            'questions' => Rubrics::all(),
+            'activeRubric' => Rubrics::routeInRubrics($rubric)
+        ]);
     }
 }

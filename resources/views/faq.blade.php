@@ -1,8 +1,8 @@
-@extends('layout')
-@section('title', 'Page Title')
+@extends('layouts.main')
+@section('title', $activeRubric->name)
 
 @section('sidebar')
-    @include("sidebar", ['rubrics' => $rubrics, 'active' => $active])
+    @include("sidebar", ['links' => $rubrics, 'active' => $activeRubric, 'header' => 'Рубрики'])
 @endsection
 @section('content')
     <div class="card horizontal">
