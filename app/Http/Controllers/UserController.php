@@ -79,6 +79,7 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
+//        $user = $user::find($request->id);
         $user->password = bcrypt($request->password);
         $user->save();
         return redirect()->back();
