@@ -12,9 +12,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('admins')->insert([
+        DB::table('users')->insert([
             'name' => 'admin',
-            'password' => md5('admin'),
+            'password' => bcrypt('admin'),
             'group' => 1
         ]);
     }

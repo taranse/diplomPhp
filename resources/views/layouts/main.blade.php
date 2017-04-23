@@ -26,8 +26,5 @@
     </div>
 </main>
 @include('footer', ['version' => '1.0.0'])
-<script src="libs/jquery/dist/jquery.min.js" defer></script>
-<script src="libs/materialize/dist/js/materialize.min.js" defer></script>
-<script src="js/app.js" defer></script>
 </body>
 </html>

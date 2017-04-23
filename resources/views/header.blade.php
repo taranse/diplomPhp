@@ -22,7 +22,12 @@
                             <span class="breadcrumb">{{$activeRubric->name}}</span>
                         @endif
                     @endif
-                    <a href="/admin" class="brand-logo right" style="font-size: 1.3rem">Вход</a>
+                    @if(Auth::guest())
+                    <a href="{{url('login')}}" class="brand-logo right" style="font-size: 1.3rem">Вход</a>
+                    @else
+                    <a href="{{url('admin')}}" class="brand-logo right" style="font-size: 1.3rem">Админ панель</a>
+                    @endif
+
                 </div>
             </div>
         </div>

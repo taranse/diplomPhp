@@ -11,10 +11,20 @@
 |
 */
 
-Route::get('/admin', 'AdminController@index');
-Route::get('/admin/moderators', 'AdminController@moderators');
+
+Route::group(array('prefix' => 'admin'), function () {
+    Route::match(['PUT', 'PATCH'], '/update/{resource}', 'UserController@update');
+    Route::get('/', 'UserController@index');
+    Route::get('/moderators', 'UserController@moderators');
+});
+
+Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
+Route::post('login', 'Auth\LoginController@login');
+Route::post('logout', 'Auth\LoginController@logout')->name('logout');
+
 
 Route::get('/', 'FaqController@main');
 Route::get('/{rubric}', 'FaqController@rubric');
 Route::get('/{rubric}/{question}', 'FaqController@question');
+
 
