@@ -14,8 +14,8 @@
 
 Route::group(array('prefix' => 'admin'), function () {
     Route::match(['PUT', 'PATCH'], '/update/{resource}', 'UserController@update');
-    Route::get('/', 'UserController@index');
-    Route::get('/moderators', 'UserController@moderators');
+    Route::get('/', 'AdminController@index');
+    Route::get('/moderators', 'AdminController@moderators');
 });
 
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
