@@ -10,8 +10,9 @@
 <body>
 @include('header', [
 'main' => isset($main) ? $main : false,
-'activeRubric' => isset($activeRubric) ? $activeRubric : [],
-'activeQuestion' => isset($activeQuestion) ? $activeQuestion : []
+'data' => isset($data) ? $data : false,
+'breadcrumbs' => isset($breadcrumbs) ? $breadcrumbs : [],
+'create' => isset($create) ? $create : false,
 ])
 <main>
     <div class="container">

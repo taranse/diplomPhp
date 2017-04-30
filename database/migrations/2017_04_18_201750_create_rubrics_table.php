@@ -18,6 +18,7 @@ class CreateRubricsTable extends Migration
             $table->string('name');
             $table->string('alias')->unique();
             $table->string('author');
+            $table->timestamps();
         });
     }
 

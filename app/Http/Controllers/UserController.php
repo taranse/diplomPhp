@@ -28,16 +28,15 @@ class UserController extends Controller
     {
 
     }
-
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
-        //
+
     }
 
     /**
@@ -71,7 +70,7 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-//        $user = $user::find($request->id);
+//        $user = User::find($userId);
         $user->password = bcrypt($request->password);
         $user->save();
         return redirect()->back();
@@ -85,6 +84,7 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        //
+        $user->delete();
+        return redirect()->back();
     }
 }

@@ -1,5 +1,5 @@
 @extends('layouts.main')
-@section('title', $data['activeRubricName'])
+@section('title', $data['activeName'])
 
 @section('sidebar')
     @include("sidebar", $data)
@@ -23,14 +23,14 @@
                 </div>
                 <div class="card-action">
                     <span>Ответил: {{$question->admin_name}}</span>
-                    <a href="{{url($data['activeRubricAlias'].'/'.$question->alias)}}" >Просмотреть ответ</a>
+                    <a href="{{url($data['activeAlias'].'/'.$question->alias)}}">Просмотреть ответ</a>
                 </div>
             </div>
         </div>
     @empty
         <p class="center-align">
             В этой рубрике еще не задавали вопросов. Будте первым!<br><br>
-            <a href="{{url($data['activeRubricAlias'] . '/new-question')}}" class="red btn">Задать вопрос</a>
+            <a href="{{url($data['activeAlias'] . '/new-question')}}" class="red btn">Задать вопрос</a>
         </p>
     @endforelse
 

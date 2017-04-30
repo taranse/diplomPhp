@@ -17,6 +17,7 @@ return [
         resource_path('views'),
     ],
 
+    'pagination' => 'pagination_slider-alt',
     /*
     |--------------------------------------------------------------------------
     | Compiled View Path

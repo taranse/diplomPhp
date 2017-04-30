@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use App\Rubrics;
+use App\Questions;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -12,6 +14,7 @@ class AdminController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public $ror = 1;
 
     public function __construct()
     {
@@ -29,6 +32,19 @@ class AdminController extends Controller
         return view('admin.moderators', ['admins' => User::all()]);
     }
 
+    public function rubrics()
+    {
+        $rubrics = Rubrics::where('id', '>', 0)->paginate(10);
+        foreach ($rubrics as $rubric) {
+            $rubric->newQuestions = Questions::where(['state' => 0, 'rubric' => $rubric->id])->count();
+            $rubric->oldQuestions = Questions::where(['state' => 1, 'rubric' => $rubric->id])->count();
+            $rubric->blockQuestions = Questions::where(['state' => 2, 'rubric' => $rubric->id])->count();
+            $rubric->authorName = User::where('id', $rubric->author)->first()->name;
+        }
+        return view('admin.rubrics', ['rubrics' => $rubrics]);
+    }
+
+
     /**
      * Show the form for creating a new resource.
      *
@@ -42,7 +58,7 @@ class AdminController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -53,7 +69,7 @@ class AdminController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Admin  $admin
+     * @param  \App\Admin $admin
      * @return \Illuminate\Http\Response
      */
     public function show(Admin $admin)
@@ -64,7 +80,7 @@ class AdminController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Admin  $admin
+     * @param  \App\Admin $admin
      * @return \Illuminate\Http\Response
      */
     public function edit(Admin $admin)
@@ -75,8 +91,8 @@ class AdminController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Admin  $admin
+     * @param  \Illuminate\Http\Request $request
+     * @param  \App\Admin $admin
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, User $admin)
@@ -87,7 +103,7 @@ class AdminController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Admin  $admin
+     * @param  \App\Admin $admin
      * @return \Illuminate\Http\Response
      */
     public function destroy(Admin $admin)

@@ -6,8 +6,7 @@
 @endsection
 @section('content')
     <div class="row">
-
-        @foreach($rubrics as $rubric)
+        @forelse($rubrics as $rubric)
             <div class="col l6">
                 <div class="card horizontal">
                     <div class="card-stacked">
@@ -20,7 +19,12 @@
                     </div>
                 </div>
             </div>
-        @endforeach
+        @empty
+            <p class="center-align">
+                Не найдено ни одной рубрики, зайдите позже
+            </p>
+        @endforelse
     </div>
+    {{$rubrics->links()}}
 
 @endsection
