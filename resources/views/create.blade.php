@@ -36,6 +36,9 @@
                 <input id="author" name="author" type="text" required maxlength="20">
                 <label for="author">Ваше имя</label>
             </div><br>
+            @if($errors->first('text'))
+                <span class="red-text">{{$errors->first('text')}}</span>
+            @endif
             <textarea required name="text" id="editor1" rows="10" cols="80"></textarea><br>
             <input type="submit" value="Задать" class="btn">
         </form>
