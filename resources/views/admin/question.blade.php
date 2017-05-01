@@ -28,7 +28,7 @@
         </span>
     </h1>
     <h5>
-        Рубрика: {{$question->rubric_name}}
+        Рубрика: {{$question->getRubric->name}}
         <form class="right" action="{{route('destroy.admin', $question->id)}}" method="POST">
             <input type="hidden" name="_method" value="DELETE">
             <input type="hidden" name="_token" value="{{ csrf_token() }}">

@@ -11,9 +11,11 @@
         <h3>Выберете рубрику</h3>
         <div class="collection with-header" id="sidebar">
             <div class="collection-header"><b>Рубрики</b></div>
-            @foreach($rubrics as $link)
+            @forelse($rubrics as $link)
                 <a class="collection-item" href="{{url($link->alias . '/new-question')}}">{{$link->name}}</a>
-            @endforeach
+            @empty
+                Дождитесь добавления рубрики администраторами
+            @endforelse
         </div>
     @else
         <h3>Задайте вопрос</h3>

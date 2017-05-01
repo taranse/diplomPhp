@@ -22,7 +22,7 @@
                     {!! $question->text !!}
                 </div>
                 <div class="card-action">
-                    <span>Ответил: {{$question->admin_name}}</span>
+                    <span>Ответил: {{$question->getUser->name}}</span>
                     <a href="{{url($data['activeAlias'].'/'.$question->alias)}}">Просмотреть ответ</a>
                 </div>
             </div>

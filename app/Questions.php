@@ -15,4 +15,12 @@ class Questions extends Model
     {
         return count(self::where('block', '>', 0)->get());
     }
+    public function getRubric()
+    {
+        return $this->belongsTo('App\Rubrics', 'rubric');
+    }
+    public function getUser()
+    {
+        return $this->belongsTo('App\User', 'admin');
+    }
 }

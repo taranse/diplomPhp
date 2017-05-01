@@ -17,10 +17,7 @@ class FaqController extends Controller
     function rubric($rubric)
     {
         $rubric = Rubrics::where('alias', $rubric)->first();
-        $questions = Questions::where(['questions.rubric' => $rubric->id, 'questions.state' => 1])
-            ->join('users', 'users.id', '=', 'questions.admin')
-            ->select('questions.*', 'users.name as admin_name')
-            ->paginate(10);
+        $questions = $rubric->getQuestions()->where(['state' => 1])->paginate(10);
         return view('rubric', [
             'data' => [
                 'links' => Rubrics::all(),
@@ -38,14 +35,11 @@ class FaqController extends Controller
     function question($rubric, $question)
     {
         $rubric = Rubrics::where('alias', $rubric)->first();
-        $questions = Questions::where(['rubric' => $rubric->id, 'state' => 1])->get();
+        $questions = $rubric->getQuestions()->where(['state' => 1])->get();
         foreach ($questions as $quest) {
             $quest->alias = $rubric->alias . '/' . $quest->alias;
         }
-        $question = Questions::where('questions.alias', $question)
-            ->join('users', 'users.id', '=', 'questions.admin')
-            ->select('questions.*', 'users.name as user_name')
-            ->first();
+        $question = Questions::where('questions.alias', $question)->first();
         return view('question', [
             'data' => [
                 'links' => $questions,

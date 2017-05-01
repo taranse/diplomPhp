@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Questions;
+use App\Rubrics;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class QuestionsController extends Controller
 {
@@ -85,15 +87,12 @@ class QuestionsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Questions $questions
+     * @param  var $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        $question = Questions::where('questions.id', $id)
-            ->join('rubrics', 'questions.rubric', '=', 'rubrics.id')
-            ->select('questions.*', 'rubrics.id as rubric_id', 'rubrics.name as rubric_name')
-            ->first();
+        $question = Questions::where('questions.id', $id)->first();
         return view('admin.question', [
             'question' => $question,
             'rubrics' => Rubrics::all(),
@@ -103,15 +102,12 @@ class QuestionsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Questions $questions
+     * @param  var $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        $question = Questions::where('questions.id', $id)
-            ->join('rubrics', 'questions.rubric', '=', 'rubrics.id')
-            ->select('questions.*', 'rubrics.id as rubric_id', 'rubrics.name as rubric_name')
-            ->first();
+        $question = Questions::find($id)->first();
         return view('admin.edit-question', [
             'question' => $question,
             'rubrics' => Rubrics::all(),
@@ -123,12 +119,12 @@ class QuestionsController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  \App\Questions $questions
+     * @param  var $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Questions $questions)
+    public function update(Request $request, $id)
     {
-        $question = $questions;
+        $question = Questions::find($id);
         $rubric = Rubrics::find($request->rubric);
 
         if (isset($request->answer)) {
@@ -166,14 +162,13 @@ class QuestionsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Questions $questions
+     * @param  var $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Questions $questions)
+    public function destroy($id)
     {
-        dd($questions);
-//        $question = Questions::find($id);
-        $questions->delete();
+        $question = Questions::find($id);
+        $question->delete();
         return redirect()->back();
     }
 }
