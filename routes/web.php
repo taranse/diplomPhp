@@ -12,15 +12,16 @@
 */
 
 
-Route::group(array('prefix' => 'admin'), function () {
+Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function () {
     Route::resource('user', 'UserController', [
         'only' => ['update', 'destroy'],
         'names' => ['update' => 'update.admin', 'destroy' => 'destroy.admin']
     ]);
-    Route::post('/register', 'Auth\RegisterController@register');
 
-    Route::get('/', 'AdminController@index');
-    Route::get('/moderators', 'AdminController@moderators');
+    Route::resource('questions', 'QuestionsController', [
+        'only' => ['show', 'edit', 'update', 'destroy'],
+        'names' => ['show' => 'show.question', 'edit' => 'edit.question', 'update' => 'update.question', 'destroy' => 'destroy.question']
+    ]);
 
     Route::resource('rubrics', 'RubricsController', [
         'only' => ['index', 'store', 'show', 'destroy', 'edit', 'update'],
@@ -29,6 +30,12 @@ Route::group(array('prefix' => 'admin'), function () {
             'destroy' => 'destroy.rubric', 'edit' => 'edit.rubric', 'update' => 'update.rubric'
         ]
     ]);
+
+    Route::post('/register', 'Auth\RegisterController@register');
+
+    Route::get('/', 'AdminController@index');
+    Route::get('/moderators', 'AdminController@moderators');
+
     Route::get('rubrics/{rubric}/delete-questions', 'RubricsController@deleteQuestions');
 
     Route::get('questions/{id}/block', 'QuestionsController@block');
@@ -37,10 +44,6 @@ Route::group(array('prefix' => 'admin'), function () {
     Route::get('new-questions', 'QuestionsController@newQuestions');
     Route::get('block-questions', 'QuestionsController@blockQuestions');
 
-    Route::resource('questions', 'QuestionsController', [
-        'only' => ['show', 'edit', 'update', 'destroy'],
-        'names' => ['show' => 'show.question', 'edit' => 'edit.question', 'update' => 'update.question', 'destroy' => 'destroy.question']
-    ]);
 });
 
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');

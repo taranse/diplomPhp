@@ -48,10 +48,10 @@ class RubricsController extends Controller
         $rubric->name = $request->name;
         $rubric->author = $request->author;
         $rubric->alias = strtr(trim($request->alias), [' ' => '', '/' => '-']);
-        if (Rubrics::orWhere(function ($query) use ($request) {
+        $oldRubric = Rubrics::orWhere(function ($query) use ($request) {
             $query->where('name', '=', $request->name)->where('alias', '=', strtr(trim($request->alias), [' ' => '', '/' => '-']));
-        })
-        ) {
+        })->first();
+        if ($oldRubric) {
             return redirect()->back()->withErrors(['name' => 'Рубрика с данным именем уже существует']);
         }
         $rubric->save();

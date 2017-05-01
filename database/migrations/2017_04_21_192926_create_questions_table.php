@@ -18,11 +18,12 @@ class CreateQuestionsTable extends Migration
             $table->string('name')->unique();
             $table->string('rubric');
             $table->string('alias');
-            $table->string('text');
+            $table->text('text');
             $table->string('state');
+            $table->string('block');
             $table->string('author');
             $table->string('email');
-            $table->string('answer')->nullable();
+            $table->text('answer')->nullable();
             $table->string('admin')->nullable();
             $table->timestamps();
         });
