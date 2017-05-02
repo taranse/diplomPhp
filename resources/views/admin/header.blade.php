@@ -15,16 +15,16 @@
                         <li>
                             <a href="{{url('admin/new-questions')}}">
                                 Новые вопросы
-                                @if(\App\Questions::newQuestions())
-                                    <span class="new badge blue">{{\App\Questions::newQuestions()}}</span>
+                                @if(\App\Question::newQuestions())
+                                    <span class="new badge blue">{{\App\Question::newQuestions()}}</span>
                                 @endif
                             </a>
                         </li>
                         <li>
                             <a href="{{url('admin/block-questions')}}">
                                 Заблокированные вопросы
-                                @if(\App\Questions::blockQuestions())
-                                    <span class="badge white-text count red darken-4">{{\App\Questions::blockQuestions()}}</span>
+                                @if(\App\Question::blockQuestions())
+                                    <span class="badge white-text count red darken-4">{{\App\Question::blockQuestions()}}</span>
                                 @endif
                             </a>
                         </li>

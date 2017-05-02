@@ -18,12 +18,12 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function () {
         'names' => ['update' => 'update.admin', 'destroy' => 'destroy.admin']
     ]);
 
-    Route::resource('questions', 'QuestionsController', [
+    Route::resource('questions', 'QuestionController', [
         'only' => ['show', 'edit', 'update', 'destroy'],
         'names' => ['show' => 'show.question', 'edit' => 'edit.question', 'update' => 'update.question', 'destroy' => 'destroy.question']
     ]);
 
-    Route::resource('rubrics', 'RubricsController', [
+    Route::resource('rubrics', 'RubricController', [
         'only' => ['index', 'store', 'show', 'destroy', 'edit', 'update'],
         'names' => [
             'index' => 'admin.rubrics', 'store' => 'store.rubric', 'show' => 'show.rubric',
@@ -36,13 +36,13 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function () {
     Route::get('/', 'AdminController@index');
     Route::get('/moderators', 'AdminController@moderators');
 
-    Route::get('rubrics/{rubric}/delete-questions', 'RubricsController@deleteQuestions');
+    Route::get('rubrics/{rubric}/delete-questions', 'RubricController@deleteQuestions');
 
-    Route::get('questions/{id}/block', 'QuestionsController@block');
-    Route::get('questions/{id}/unblock', 'QuestionsController@unblock');
+    Route::get('questions/{id}/block', 'QuestionController@block');
+    Route::get('questions/{id}/unblock', 'QuestionController@unblock');
 
-    Route::get('new-questions', 'QuestionsController@newQuestions');
-    Route::get('block-questions', 'QuestionsController@blockQuestions');
+    Route::get('new-questions', 'QuestionController@newQuestions');
+    Route::get('block-questions', 'QuestionController@blockQuestions');
 
 });
 
@@ -54,7 +54,7 @@ Route::get('/', 'FaqController@main');
 Route::get('/new-question', 'FaqController@getRubricForCreate');
 
 
-Route::resource('/new-question/create', 'QuestionsController', ['only' => ['store'], 'names' => ['store' => 'create.question']]);
+Route::get('/new-question/create', 'QuestionController@store')->name('create.question');
 
 Route::group(array('prefix' => '{rubric}'), function () {
     Route::get('/', 'FaqController@rubric');

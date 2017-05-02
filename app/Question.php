@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Questions extends Model
+class Question extends Model
 {
 
     static function newQuestions()
@@ -17,7 +17,7 @@ class Questions extends Model
     }
     public function getRubric()
     {
-        return $this->belongsTo('App\Rubrics', 'rubric');
+        return $this->belongsTo('App\Rubric', 'rubric');
     }
     public function getUser()
     {

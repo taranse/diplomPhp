@@ -4,11 +4,11 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Rubrics extends Model
+class Rubric extends Model
 {
     public function getQuestions()
     {
-        return $this->hasMany('App\Questions', 'rubric');
+        return $this->hasMany('App\Question', 'rubric');
     }
     public function getAuthor()
     {

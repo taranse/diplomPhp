@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\User;
-use App\Rubrics;
-use App\Questions;
+use App\Rubric;
+use App\Question;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller

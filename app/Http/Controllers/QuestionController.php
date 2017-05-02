@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Questions;
-use App\Rubrics;
+use App\Question;
+use App\Rubric;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class QuestionsController extends Controller
+class QuestionController extends Controller
 {
     public $translit = [
         'а' => 'a', 'б' => 'b', 'в' => 'v',
@@ -39,21 +39,21 @@ class QuestionsController extends Controller
     public function index()
     {
         return view('admin.all-questions', [
-            'questions' => Questions::where(['state' => 1, 'block' => 0])->orderBy('created_at', 'desc')->paginate(5)
+            'questions' => Question::where(['state' => 1, 'block' => 0])->orderBy('created_at', 'desc')->paginate(5)
         ]);
     }
 
     public function newQuestions()
     {
         return view('admin.all-questions', [
-            'questions' => Questions::where(['state' => 0, 'block' => 0])->orderBy('created_at', 'desc')->paginate(5)
+            'questions' => Question::where(['state' => 0, 'block' => 0])->orderBy('created_at', 'desc')->paginate(5)
         ]);
     }
 
     public function blockQuestions()
     {
         return view('admin.all-questions', [
-            'questions' => Questions::where([['block', '>', 0]])->orderBy('created_at', 'desc')->paginate(5)
+            'questions' => Question::where([['block', '>', 0]])->orderBy('created_at', 'desc')->paginate(5)
         ]);
     }
 
@@ -65,7 +65,7 @@ class QuestionsController extends Controller
      */
     public function store(Request $request)
     {
-        $question = new Questions;
+        $question = new Question;
         $question->author = $request->author;
         $question->email = $request->email;
         $question->rubric = $request->rubric;
@@ -75,7 +75,7 @@ class QuestionsController extends Controller
         }
         $question->text = $request->text;
         $question->alias = strtolower(strtr(trim($request->name), $this->translit));
-        if (Questions::where('alias', $question->alias)->first()) {
+        if (Question::where('alias', $question->alias)->first()) {
             return redirect()->back()->withErrors(['name' => 'Вопрос с таким именем уже существует']);
         }
         $question->state = 0;
@@ -87,30 +87,28 @@ class QuestionsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  var $id
+     * @param  Question $question
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Question $question)
     {
-        $question = Questions::where('questions.id', $id)->first();
         return view('admin.question', [
             'question' => $question,
-            'rubrics' => Rubrics::all(),
+            'rubrics' => Rubric::all(),
         ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  var $id
+     * @param  Question $question
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Question $question)
     {
-        $question = Questions::find($id)->first();
         return view('admin.edit-question', [
             'question' => $question,
-            'rubrics' => Rubrics::all(),
+            'rubrics' => Rubric::all(),
             'edit' => true
         ]);
     }
@@ -119,14 +117,11 @@ class QuestionsController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  var $id
+     * @param  Question $question
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Question $question)
     {
-        $question = Questions::find($id);
-        $rubric = Rubrics::find($request->rubric);
-
         if (isset($request->answer)) {
             $question->answer = $request->answer;
             $question->state = 1;
@@ -134,7 +129,7 @@ class QuestionsController extends Controller
         } else {
             $question->text = $request->text;
             $question->name = $request->name;
-            $question->rubric = $rubric->id;
+            $question->rubric = $request->rubric;
             $question->author = $request->author;
             $question->alias = strtolower(strtr(trim($request->name), $this->translit));
         }
@@ -145,7 +140,7 @@ class QuestionsController extends Controller
 
     public function block($id)
     {
-        $question = Questions::find($id);
+        $question = Question::find($id);
         $question->block = 1;
         $question->save();
         return redirect()->back();
@@ -153,7 +148,7 @@ class QuestionsController extends Controller
 
     public function unblock($id)
     {
-        $question = Questions::find($id);
+        $question = Question::find($id);
         $question->block = 0;
         $question->save();
         return redirect()->back();
@@ -162,12 +157,11 @@ class QuestionsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  var $id
+     * @param  Question $question
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Question $question)
     {
-        $question = Questions::find($id);
         $question->delete();
         return redirect()->back();
     }
