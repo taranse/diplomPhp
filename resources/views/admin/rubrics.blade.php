@@ -9,12 +9,12 @@
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
             <input type="hidden" name="author" value="{{ Auth::user()->id }}">
             <div class="input-field inline">
-                <input type="text" id="name" name="name" required>
+                <input type="text" id="name" name="name">
                 <label for="name">Имя рубрики</label>
             </div>
             &nbsp;
             <div class="input-field inline">
-                <input type="text" id="alias" name="alias" required>
+                <input type="text" id="alias" name="alias">
                 <label for="alias">Алиас</label>
             </div>
             &nbsp;

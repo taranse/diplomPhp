@@ -1,5 +1,4 @@
 <?php
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -10,8 +9,6 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-
 Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function () {
     Route::resource('user', 'UserController', [
         'only' => ['update', 'destroy'],

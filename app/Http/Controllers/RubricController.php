@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RubricRequest;
 use App\Rubric;
 use App\Question;
 use App\User;
@@ -31,8 +32,9 @@ class RubricController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(RubricRequest $request)
     {
+        dd($request);
         $rubric = new Rubric;
         $rubric->name = $request->name;
         $rubric->author = $request->author;
@@ -50,7 +52,7 @@ class RubricController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  var $alias
+     * @param  string $alias
      * @return \Illuminate\Http\Response
      */
     public function show($alias)
@@ -70,7 +72,7 @@ class RubricController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  var $alias
+     * @param  string $alias
      * @return \Illuminate\Http\Response
      */
     public function edit($alias)
@@ -85,7 +87,7 @@ class RubricController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  var $alias
+     * @param  string $alias
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $alias)

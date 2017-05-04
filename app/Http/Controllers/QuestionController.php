@@ -140,7 +140,7 @@ class QuestionController extends Controller
 
     public function block($id)
     {
-        $question = Question::find($id);
+        $question = Question::findOrFail($id);
         $question->block = 1;
         $question->save();
         return redirect()->back();
@@ -148,7 +148,7 @@ class QuestionController extends Controller
 
     public function unblock($id)
     {
-        $question = Question::find($id);
+        $question = Question::findOrFail($id);
         $question->block = 0;
         $question->save();
         return redirect()->back();
