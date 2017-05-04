@@ -27,7 +27,7 @@ class QuestionRequest extends FormRequest
             'text' => 'required',
             'author' => 'required',
             'email' => 'required',
-            'name' => 'required|unique:questions|max=100',
+            'name' => 'required|unique:questions|max:100',
         ];
     }
     public function messages()

@@ -51,7 +51,7 @@ Route::get('/', 'FaqController@main');
 Route::get('/new-question', 'FaqController@getRubricForCreate');
 
 
-Route::get('/new-question/create', 'QuestionController@store')->name('create.question');
+Route::post('/new-question/create', 'QuestionController@store')->name('create.question');
 
 Route::group(array('prefix' => '{rubric}'), function () {
     Route::get('/', 'FaqController@rubric');

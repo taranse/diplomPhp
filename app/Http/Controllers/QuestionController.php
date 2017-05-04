@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\QuestionRequest;
 use App\Question;
 use App\Rubric;
 use Illuminate\Http\Request;
@@ -60,7 +61,7 @@ class QuestionController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  \Illuminate\Http\QuestionRequest $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(QuestionRequest $request)
@@ -114,9 +115,9 @@ class QuestionController extends Controller
      * @param  Question $question
      * @return \Illuminate\Http\Response
      */
-    public function update(QuestionRequest $request, Question $question)
+    public function update(Request $request, Question $question)
     {
-        if (isset($request->answer)) {
+        if ($request->has('answer')) {
             $question->answer = $request->answer;
             $question->state = 1;
             $question->admin = Auth::user()->id;
