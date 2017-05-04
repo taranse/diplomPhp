@@ -34,10 +34,17 @@
                 <input id="email" name="email" type="email" required>
                 <label for="email">Введите свой email</label>
             </div><br>
+            @if($errors->first('email'))
+                <span class="red-text">{{$errors->first('email')}}</span>
+            @endif
             <div class="input-field">
                 <input id="author" name="author" type="text" required maxlength="20">
                 <label for="author">Ваше имя</label>
             </div><br>
+
+            @if($errors->first('author'))
+                <span class="red-text">{{$errors->first('author')}}</span>
+            @endif
             @if($errors->first('text'))
                 <span class="red-text">{{$errors->first('text')}}</span>
             @endif

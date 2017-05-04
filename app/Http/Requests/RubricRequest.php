@@ -24,7 +24,7 @@ class RubricRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|max:255',
+            'name' => 'required|unique:rubrics|max:255',
             'alias' => 'required|unique:rubrics|max:255'
         ];
     }
@@ -34,6 +34,10 @@ class RubricRequest extends FormRequest
         return [
             'name.required' => 'Название должно быть заполнено',
             'alias.required'  => 'Алиас должен быть заполнен',
+            'name.max' => 'Слишком длинное навзвание',
+            'alias.max'  => 'Слишком длинный алиас',
+            'name.unique' => 'Рубрика с данным именем уже существует',
+            'alias.unique'  => 'Рубрика с данным алиасом уже существует',
         ];
     }
 }

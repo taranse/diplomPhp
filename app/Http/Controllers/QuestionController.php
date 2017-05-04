@@ -63,21 +63,15 @@ class QuestionController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(QuestionRequest $request)
     {
         $question = new Question;
         $question->author = $request->author;
         $question->email = $request->email;
         $question->rubric = $request->rubric;
         $question->name = $request->name;
-        if (empty($request->text)) {
-            return redirect()->back()->withErrors(['text' => 'Вопрос не может быть пустым']);
-        }
         $question->text = $request->text;
         $question->alias = strtolower(strtr(trim($request->name), $this->translit));
-        if (Question::where('alias', $question->alias)->first()) {
-            return redirect()->back()->withErrors(['name' => 'Вопрос с таким именем уже существует']);
-        }
         $question->state = 0;
         $question->block = 0;
         $question->save();
@@ -120,7 +114,7 @@ class QuestionController extends Controller
      * @param  Question $question
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Question $question)
+    public function update(QuestionRequest $request, Question $question)
     {
         if (isset($request->answer)) {
             $question->answer = $request->answer;

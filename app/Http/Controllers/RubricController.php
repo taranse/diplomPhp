@@ -34,17 +34,10 @@ class RubricController extends Controller
      */
     public function store(RubricRequest $request)
     {
-        dd($request);
         $rubric = new Rubric;
         $rubric->name = $request->name;
         $rubric->author = $request->author;
         $rubric->alias = strtr(trim($request->alias), [' ' => '', '/' => '-']);
-        $oldRubric = Rubric::orWhere(function ($query) use ($request) {
-            $query->where('name', '=', $request->name)->where('alias', '=', strtr(trim($request->alias), [' ' => '', '/' => '-']));
-        })->first();
-        if ($oldRubric) {
-            return redirect()->back()->withErrors(['name' => 'Рубрика с данным именем уже существует']);
-        }
         $rubric->save();
         return redirect()->back();
     }
@@ -90,7 +83,7 @@ class RubricController extends Controller
      * @param  string $alias
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $alias)
+    public function update(RubricRequest $request, $alias)
     {
         $rubric = Rubric::where('alias', $alias)->first();
         $rubric->name = $request->name;

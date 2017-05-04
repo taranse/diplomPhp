@@ -22,6 +22,9 @@
             @if($errors->first('name'))
                 <p>{{$errors->first('name')}}</p>
             @endif
+            @if($errors->first('alias'))
+                <p>{{$errors->first('alias')}}</p>
+            @endif
         </form>
     @endif
 
