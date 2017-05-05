@@ -11,16 +11,18 @@ class FaqController extends Controller
 
     function main()
     {
-        return view('main', ['rubrics' => Rubric::where('id', '>', '0')->paginate(12), 'main' => true]);
+        $rubrics = Rubric::where('id', '>', '0')->paginate(12);
+        return view('main', ['rubrics' => $rubrics, 'main' => true]);
     }
 
     function rubric($rubric)
     {
-        $rubric = Rubric::where('alias', $rubric)->first();
-        $questions = $rubric->getQuestions()->where(['state' => 1])->paginate(10);
+        $rubric = Rubric::alias($rubric);
+        $rubrics = Rubric::all();
+        $questions = $rubric->activeQuestions()->paginate(10);
         return view('rubric', [
             'data' => [
-                'links' => Rubric::all(),
+                'links' => $rubrics,
                 'activeName' => $rubric->name,
                 'activeAlias' => $rubric->alias,
                 'header' => 'Выбранная рубрика'
@@ -34,12 +36,12 @@ class FaqController extends Controller
 
     function question($rubric, $question)
     {
-        $rubric = Rubric::where('alias', $rubric)->first();
-        $questions = $rubric->getQuestions()->where(['state' => 1])->get();
-        foreach ($questions as $quest) {
+        $rubric = Rubric::alias($rubric);
+        $questions = $rubric->activeQuestions()->get();
+        $questions->map(function ($quest) use ($rubric) {
             $quest->alias = $rubric->alias . '/' . $quest->alias;
-        }
-        $question = Question::where('questions.alias', $question)->first();
+        });
+        $question = Question::where('questions.alias', $question)->firstOrFail();
         return view('question', [
             'data' => [
                 'links' => $questions,
@@ -57,12 +59,13 @@ class FaqController extends Controller
 
     function getRubricForCreate()
     {
-        return view('create', ['rubrics' => Rubric::all()]);
+        $rubrics = Rubric::all();
+        return view('create', ['rubrics' => $rubrics]);
     }
 
     function create($rubric)
     {
-        $rubric = Rubric::where('alias', $rubric)->first();
+        $rubric = Rubric::alias($rubric);
         return view('create', [
             'activeRubricName' => $rubric->name,
             'activeRubricAlias' => $rubric->alias,

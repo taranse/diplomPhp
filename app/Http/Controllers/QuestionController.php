@@ -39,22 +39,25 @@ class QuestionController extends Controller
 
     public function index()
     {
+        $questions = Question::active()->fiveItems();
         return view('admin.all-questions', [
-            'questions' => Question::where(['state' => 1, 'block' => 0])->orderBy('created_at', 'desc')->paginate(5)
+            'questions' => $questions
         ]);
     }
 
     public function newQuestions()
     {
+        $questions = Question::newItems()->fiveItems();
         return view('admin.all-questions', [
-            'questions' => Question::where(['state' => 0, 'block' => 0])->orderBy('created_at', 'desc')->paginate(5)
+            'questions' => $questions
         ]);
     }
 
     public function blockQuestions()
     {
+        $questions = Question::block()->fiveItems();
         return view('admin.all-questions', [
-            'questions' => Question::where([['block', '>', 0]])->orderBy('created_at', 'desc')->paginate(5)
+            'questions' => $questions
         ]);
     }
 
@@ -66,16 +69,11 @@ class QuestionController extends Controller
      */
     public function store(QuestionRequest $request)
     {
-        $question = new Question;
-        $question->author = $request->author;
-        $question->email = $request->email;
-        $question->rubric = $request->rubric;
-        $question->name = $request->name;
-        $question->text = $request->text;
-        $question->alias = strtolower(strtr(trim($request->name), $this->translit));
-        $question->state = 0;
-        $question->block = 0;
-        $question->save();
+        $request->alias = strtolower(strtr(trim($request->name), $this->translit));
+        $request->state = 0;
+        $request->block = 0;
+        $params = $request->except('_token');
+        Question::create($params);
         return redirect()->back();
     }
 
@@ -87,9 +85,10 @@ class QuestionController extends Controller
      */
     public function show(Question $question)
     {
+        $rubrics = Rubric::all();
         return view('admin.question', [
             'question' => $question,
-            'rubrics' => Rubric::all(),
+            'rubrics' => $rubrics,
         ]);
     }
 
@@ -101,9 +100,10 @@ class QuestionController extends Controller
      */
     public function edit(Question $question)
     {
+        $rubrics = Rubric::all();
         return view('admin.edit-question', [
             'question' => $question,
-            'rubrics' => Rubric::all(),
+            'rubrics' => $rubrics,
             'edit' => true
         ]);
     }

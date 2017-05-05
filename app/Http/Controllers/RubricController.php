@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\RubricRequest;
 use App\Rubric;
-use App\Question;
-use App\User;
 use Illuminate\Http\Request;
 
 class RubricController extends Controller
@@ -19,13 +17,14 @@ class RubricController extends Controller
     {
         $rubrics = Rubric::where('id', '>', 0)->paginate(10);
         foreach ($rubrics as $rubric) {
-            $rubric->newQuestions = $rubric->getQuestions()->where(['state' => 0, 'block' => 0])->count();
-            $rubric->oldQuestions = $rubric->getQuestions()->where(['state' => 1, 'rubric' => $rubric->id, 'block' => 0])->count();
-            $rubric->blockQuestions = $rubric->getQuestions()->where([['block', '>', 0]])->count();
+            $rubric->newQuestions = $rubric->getQuestions()->newItem()->count();
+            $rubric->oldQuestions = $rubric->getQuestions()->active()->count();
+            $rubric->blockQuestions = $rubric->getQuestions()->block()->count();
             $rubric->authorName = $rubric->getAuthor->name;
         }
         return view('admin.rubrics', ['rubrics' => $rubrics]);
     }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -46,16 +45,17 @@ class RubricController extends Controller
      * Display the specified resource.
      *
      * @param  string $alias
+     * @param  Request $request
      * @return \Illuminate\Http\Response
      */
-    public function show($alias)
+    public function show($alias, Request $request)
     {
-        $filter = isset($_GET['filter']) ? explode(',', $_GET['filter']) : [];
-        $rubric = Rubric::where('alias', $alias)->first();
+        $filter = $request->has('filter') ? explode(',', $request->filter) : [];
+        $rubric = Rubric::alias($alias);
         if (!in_array('-1', $filter) and $filter != []) {
-            $questions = $rubric->getQuestions()->where([['block', '=', 0]])->whereIn('state', $filter)->orderBy('state')->orderBy('block')->paginate(5);
+            $questions = $rubric->getQuestions()->where('block', 0)->whereIn('state', $filter)->orderBy('state')->orderBy('block')->paginate(5);
         } elseif (in_array('-1', $filter) and $filter != []) {
-            $questions = $rubric->getQuestions()->where([['block', '>', 0]])->orderBy('state')->orderBy('block')->paginate(5);
+            $questions = $rubric->getQuestions()->block()->orderBy('state')->orderBy('block')->paginate(5);
         } else {
             $questions = $rubric->getQuestions()->orderBy('state')->orderBy('block')->paginate(5);
         }
@@ -70,7 +70,7 @@ class RubricController extends Controller
      */
     public function edit($alias)
     {
-        $rubric = Rubric::where('alias', $alias)->first();
+        $rubric = Rubric::alias($alias);
         $questions = $rubric->getQuestions()->orderBy('state')->orderBy('block')->paginate(5);
         return view('admin.rubric', ['rubric' => $rubric, 'edit' => true, 'questions' => $questions]);
 
@@ -85,7 +85,7 @@ class RubricController extends Controller
      */
     public function update(RubricRequest $request, $alias)
     {
-        $rubric = Rubric::where('alias', $alias)->first();
+        $rubric = Rubric::alias($alias);
         $rubric->name = $request->name;
         $rubric->alias = strtr(trim($request->alias), [' ' => '', '/' => '-']);
         $rubric->save();
@@ -94,7 +94,7 @@ class RubricController extends Controller
 
     public function deleteQuestions($rubric)
     {
-        $questions = Rubric::where('alias', $rubric)->first()->getQuestions;
+        $questions = Rubric::alias($rubric)->getQuestions;
         foreach ($questions as $question) {
             $question->delete();
         }

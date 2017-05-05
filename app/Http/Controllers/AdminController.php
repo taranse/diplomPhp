@@ -23,6 +23,7 @@ class AdminController extends Controller
 
     public function moderators()
     {
-        return view('admin.moderators', ['admins' => User::all()]);
+        $admins = User::all();
+        return view('admin.moderators', ['admins' => $admins]);
     }
 }

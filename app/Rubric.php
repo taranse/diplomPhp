@@ -14,4 +14,14 @@ class Rubric extends Model
     {
         return $this->belongsTo('App\User', 'author');
     }
+
+    public function scopeAlias($query, $alias)
+    {
+        return $query->where('alias', $alias)->firstOrFail();
+    }
+
+    public function scopeActiveQuestions($query, $alias)
+    {
+        return $query->getQuestions()->where('state', 1);
+    }
 }
