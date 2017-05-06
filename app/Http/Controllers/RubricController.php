@@ -17,7 +17,7 @@ class RubricController extends Controller
     {
         $rubrics = Rubric::where('id', '>', 0)->paginate(10);
         foreach ($rubrics as $rubric) {
-            $rubric->newQuestions = $rubric->getQuestions()->newItem()->count();
+            $rubric->newQuestions = $rubric->getQuestions()->newItems()->count();
             $rubric->oldQuestions = $rubric->getQuestions()->active()->count();
             $rubric->blockQuestions = $rubric->getQuestions()->block()->count();
             $rubric->authorName = $rubric->getAuthor->name;

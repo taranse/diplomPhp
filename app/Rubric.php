@@ -20,7 +20,7 @@ class Rubric extends Model
         return $query->where('alias', $alias)->firstOrFail();
     }
 
-    public function scopeActiveQuestions($query, $alias)
+    public function scopeActiveQuestions($query)
     {
         return $query->getQuestions()->where('state', 1);
     }
