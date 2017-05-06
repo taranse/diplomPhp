@@ -28,7 +28,7 @@ class RubricController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  RubricRequest $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(RubricRequest $request)
@@ -79,7 +79,7 @@ class RubricController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  RubricRequest $request
      * @param  string $alias
      * @return \Illuminate\Http\Response
      */
