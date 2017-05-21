@@ -22,3 +22,4 @@ span.badge.count {font-size: .8rem;min-width:2rem;}
 input.search { margin: 0;height: 40px;}
 h2 {margin-top: 0}
 .content {overflow: hidden;background-color: #f0f0f0;padding: 10px;}
+.text-nowrap {white-space: nowrap}

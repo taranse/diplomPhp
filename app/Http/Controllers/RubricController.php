@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\RubricRequest;
 use App\Rubric;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class RubricController extends Controller
 {
@@ -38,6 +40,7 @@ class RubricController extends Controller
         $rubric->author = $request->author;
         $rubric->alias = strtr(trim($request->alias), [' ' => '', '/' => '-']);
         $rubric->save();
+        Log::info('Администратор ' . Auth::user()->name . ' создал рубрику "' . $request->name . '" ('.$rubric->id.')');
         return redirect()->back();
     }
 
@@ -55,7 +58,15 @@ class RubricController extends Controller
         if (!in_array('-1', $filter) and $filter != []) {
             $questions = $rubric->getQuestions()->where('block', 0)->whereIn('state', $filter)->orderBy('state')->orderBy('block')->paginate(5);
         } elseif (in_array('-1', $filter) and $filter != []) {
-            $questions = $rubric->getQuestions()->block()->orderBy('state')->orderBy('block')->paginate(5);
+            $newFilter = $filter;
+            unset($newFilter[in_array('-1', $filter)]);
+            if ($newFilter[0] == '1') {
+                $questions = $rubric->getQuestions()->block(['state', 1])->orderBy('state')->orderBy('block')->paginate(5);
+            } else if ($newFilter[0] == '0'){
+                $questions = $rubric->getQuestions()->block()->orWhere(['state', 0])->orderBy('state')->orderBy('block')->paginate(5);
+            } else {
+                $questions = $rubric->getQuestions()->block()->orderBy('state')->orderBy('block')->paginate(5);
+            }
         } else {
             $questions = $rubric->getQuestions()->orderBy('state')->orderBy('block')->paginate(5);
         }
@@ -80,12 +91,12 @@ class RubricController extends Controller
      * Update the specified resource in storage.
      *
      * @param  RubricRequest $request
-     * @param  string $alias
+     * @param  Rubric $rubric
      * @return \Illuminate\Http\Response
      */
-    public function update(RubricRequest $request, $alias)
+    public function update(Request $request, Rubric $rubric)
     {
-        $rubric = Rubric::alias($alias);
+        Log::info('Администратор ' . Auth::user()->name . ' обновил рубрику "' . $rubric->name . '" ('.$rubric->id.')' );
         $rubric->name = $request->name;
         $rubric->alias = strtr(trim($request->alias), [' ' => '', '/' => '-']);
         $rubric->save();
@@ -94,10 +105,12 @@ class RubricController extends Controller
 
     public function deleteQuestions($rubric)
     {
-        $questions = Rubric::alias($rubric)->getQuestions;
+        $rubric = Rubric::alias($rubric);
+        $questions = $rubric->getQuestions;
         foreach ($questions as $question) {
             $question->delete();
         }
+        Log::info('Администратор ' . Auth::user()->name . ' удалил все вопросы из рубрики "' . $rubric->name . '" ('.$rubric->id.')' );
         return redirect()->back();
     }
 
@@ -114,6 +127,7 @@ class RubricController extends Controller
             $question->delete();
         }
         $rubric->delete();
+        Log::info('Администратор ' . Auth::user()->name . ' удалил рубрику "' . $rubric->name . '" ('.$rubric->id.') и все вопросы в ней' );
         return redirect()->back();
     }
 }

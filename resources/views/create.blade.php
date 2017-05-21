@@ -50,6 +50,7 @@
             @endif
             <textarea required name="text" id="editor1" rows="10" cols="80"></textarea><br>
             <input type="submit" value="Задать" class="btn">
+            <br><br>
         </form>
         <script>
             CKEDITOR.replace('editor1');

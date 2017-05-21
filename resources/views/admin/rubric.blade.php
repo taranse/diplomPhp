@@ -10,7 +10,7 @@
     <div class="mar-30"></div>
     @if(isset($edit))
         <a class="btn green" href="{{url('admin/rubrics/'.$rubric->alias)}}">Назад</a><br><br><br>
-        <form id="form-edit" action="{{route('update.rubric', $rubric->alias)}}" method="POST">
+        <form id="form-edit" action="{{route('update.rubric', $rubric->id)}}" method="POST">
             <input type="hidden" name="_method" value="PUT">
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
             <div class="input-field">

@@ -28,6 +28,11 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function () {
         ]
     ]);
 
+    Route::resource('block-list', 'BlockWordsController', [
+        'only' => ['index', 'store', 'destroy'],
+        'names' => ['index' => 'all.block-list', 'store' => 'store.block-list', 'destroy' => 'destroy.block-list']
+    ]);
+
     Route::post('/register', 'Auth\RegisterController@register');
 
     Route::get('/', 'AdminController@index');
@@ -53,7 +58,7 @@ Route::get('/new-question', 'FaqController@getRubricForCreate');
 
 Route::post('/new-question/create', 'QuestionController@store')->name('create.question');
 
-Route::group(array('prefix' => '{rubric}'), function () {
+Route::group(['prefix' => '{rubric}'], function () {
     Route::get('/', 'FaqController@rubric');
     Route::get('/new-question', 'FaqController@create');
     Route::get('/{question}', 'FaqController@question');

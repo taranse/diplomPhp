@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\BlockWords;
 use App\Http\Requests\QuestionRequest;
 use App\Question;
 use App\Rubric;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class QuestionController extends Controller
 {
@@ -60,20 +62,28 @@ class QuestionController extends Controller
             'questions' => $questions
         ]);
     }
-
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\QuestionRequest $request
+     * @param  QuestionRequest $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(QuestionRequest $request)
     {
-        $request->alias = strtolower(strtr(trim($request->name), $this->translit));
-        $request->state = 0;
-        $request->block = 0;
         $params = $request->except('_token');
+        $params["alias"] = strtolower(strtr(trim($request->name), $this->translit));
+        $params["state"] = 0;
+        $params["block"] = 0;
+        $blockWords = BlockWords::get();
+        foreach ($blockWords as $word) {
+            if(strpos($request->text, $word->word)) {
+                $params["block"] = 2;
+                break;
+            }
+        }
         Question::create($params);
+        $rubric = Rubric::find($request->rubric);
+        Log::info('Пользователь '. $request->author. ' задал вопрос в рубрике "'. $rubric->name . '" ('.$rubric->id.')' );
         return redirect()->back();
     }
 
@@ -121,15 +131,21 @@ class QuestionController extends Controller
             $question->answer = $request->answer;
             $question->state = 1;
             $question->admin = Auth::user()->id;
+            $rubric = Rubric::find($question->rubric);
+            Log::info('Администратор '. Auth::user()->name. ' опубликовал вопрос "'. $question->name .'" ('.$question->id.') в рубрике "'. $rubric->name . '" ('.$rubric->id.')' );
+            $question->save();
         } else {
             $question->text = $request->text;
             $question->name = $request->name;
             $question->rubric = $request->rubric;
             $question->author = $request->author;
             $question->alias = strtolower(strtr(trim($request->name), $this->translit));
+            $rubric = Rubric::find($question->rubric);
+            $question->save();
+            Log::info('Администратор '. Auth::user()->name. ' изменил вопрос "'. $question->name .'" ('.$question->id.') в рубрике "'. $rubric->name . '" ('.$rubric->id.')' );
+
         }
 
-        $question->save();
         return redirect()->route('show.question', $question->id);
     }
 
@@ -137,6 +153,8 @@ class QuestionController extends Controller
     {
         $question = Question::findOrFail($id);
         $question->block = 1;
+        $rubric = Rubric::find($question->rubric);
+        Log::info('Администратор '. Auth::user()->name. ' заблокировал вопрос "'. $question->name .'" ('.$question->id.') в рубрике "'. $rubric->name . '" ('.$rubric->id.')' );
         $question->save();
         return redirect()->back();
     }
@@ -145,6 +163,8 @@ class QuestionController extends Controller
     {
         $question = Question::findOrFail($id);
         $question->block = 0;
+        $rubric = Rubric::find($question->rubric);
+        Log::info('Администратор '. Auth::user()->name. ' разблокировал вопрос "'. $question->name .'" ('.$question->id.') в рубрике "'. $rubric->name . '" ('.$rubric->id.')' );
         $question->save();
         return redirect()->back();
     }
@@ -157,6 +177,8 @@ class QuestionController extends Controller
      */
     public function destroy(Question $question)
     {
+        $rubric = Rubric::find($question->rubric);
+        Log::info('Администратор '. Auth::user()->name. ' удалил вопрос "'. $question->name .'" ('.$question->id.') в рубрике "'. $rubric->name . '" ('.$rubric->id.')' );
         $question->delete();
         return redirect()->back();
     }

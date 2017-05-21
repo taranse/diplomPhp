@@ -22,10 +22,15 @@
                         </li>
                         <li>
                             <a href="{{url('admin/block-questions')}}">
-                                Заблокированные вопросы
+                                Заблокированные
                                 @if(\App\Question::blockQuestions())
                                     <span class="badge white-text count red darken-4">{{\App\Question::blockQuestions()}}</span>
                                 @endif
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{route('all.block-list')}}">
+                                Блок-лист
                             </a>
                         </li>
                     </ul>

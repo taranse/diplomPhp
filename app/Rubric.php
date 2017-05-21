@@ -22,6 +22,6 @@ class Rubric extends Model
 
     public function scopeActiveQuestions($query)
     {
-        return $query->getQuestions()->where('state', 1);
+        return $this->getQuestions()->where('state', 1);
     }
 }

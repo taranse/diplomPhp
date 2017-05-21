@@ -8,7 +8,12 @@
         @forelse($questions as $question)
             <div class="card z-depth-2">
                 <div class="card-content">
-                    <span class="card-title left">{{$question->name}}</span>
+                    <span class="card-title left">
+                        {{$question->name}}
+                        @if($question->block == 2)
+                           <span class="red-text"> (Цензура) </span>
+                        @endif
+                    </span>
                     <span class="card-title right">{{$question->author}}</span>
                     <div class="clear"></div>
                     <span>Дата добавления: {{$question->created_at}}</span>

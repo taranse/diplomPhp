@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Question extends Model
 {
 
-    protected $fillable = ['name', 'author', 'email', 'rubric', 'text'];
+    protected $fillable = ['name', 'author', 'email', 'rubric', 'text', 'alias', 'state', 'block'];
 
 
     static function newQuestions()
@@ -40,9 +40,9 @@ class Question extends Model
         return $query->where(['state' => 0, 'block' => 0]);
     }
 
-    public function scopeBlock($query)
+    public function scopeBlock($query, $block = 0)
     {
-        return $query->where('block', '>', 0);
+        return $query->where('block', '>', $block);
     }
 
     public function scopeFiveItems($query)
